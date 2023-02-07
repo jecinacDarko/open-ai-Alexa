@@ -1,3 +1,4 @@
+import './style.css';
 import bot from './assets/bot.svg';
 import user from './assets/user.svg';
 
@@ -7,12 +8,12 @@ const chatContainer = document.querySelector('#chat_container');
 let loadInterval;
 
 function loader(element) {
-  element.textContent = '';
+  element.textContent = ''
   
   loadInterval = setInterval(() => {
     element.textContent += '.';
 
-    if(element.textContent === '....'){
+    if(element.textContent === '....') {
       element.textContent ='';
     }
   }, 300);
@@ -50,7 +51,7 @@ function chatStripe (isAi, value, uniqueId) {
             alt="${isAi ? 'bot' : 'user'}"
           />
         </div>
-          <div class="message" id="${uniqueId}>${value}</div>
+          <div class="message" id="${uniqueId}">${value}</div> 
       </div>
     </div>
     `
@@ -73,30 +74,30 @@ const handleSubmit = async (e) => {
  
   loader(messageDiv);
 
-  // const response = await fetch('', {
-  //       method: 'POST',
-  //       headers: {
-  //           'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //           prompt: data.get('prompt')
-  //       })
-  //   })
+    const response = await fetch('http://localhost:5000/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+          prompt: data.get('prompt')
+        })
+      })
 
-  //   clearInterval(loadInterval)
-  //   messageDiv.innerHTML = " "
+    clearInterval(loadInterval)
+    messageDiv.innerHTML = " "
 
-  //   if (response.ok) {
-  //       const data = await response.json();
-  //       const parsedData = data.bot.trim() // trims any trailing spaces/'\n' 
+    if (response.ok) {
+        const data = await response.json();
+        const parsedData = data.bot.trim();
 
-  //       typeText(messageDiv, parsedData)
-  //   } else {
-  //       const err = await response.text()
+        typeText(messageDiv, parsedData); 
+    } else {
+        const err = await response.text();
 
-  //       messageDiv.innerHTML = "Something went wrong"
-  //       alert(err)
-  //   }
+        messageDiv.innerHTML = "Something went wrong";
+        alert(err)
+    }
 }
 
 
